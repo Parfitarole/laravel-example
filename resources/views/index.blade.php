@@ -11,7 +11,10 @@
     </head>
     <body>
         @include('layout.navbar')
-        @yield('content')
+        <div class="container mt-4" style="min-height: 90vh;">
+            @yield('content')
+        </div>
         @include('layout.footer')
+        <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"></script>
     </body>
 </html>

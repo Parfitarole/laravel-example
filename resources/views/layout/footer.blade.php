@@ -1,4 +1,4 @@
-<footer class="text-center text-lg-start bg-light text-muted fixed-bottom">
+<footer class="text-center text-lg-start bg-light text-muted mt-4">
     <div class="container text-center text-md-start py-3">
         <div class="row mt-3">
             <div class="col-4">
@@ -7,9 +7,12 @@
             </div>
             <div class="col-2">
                 <h6 class="fw-bold mb-4">Links</h6>
-                <p><a href="/" class="text-reset">Home</a></p>
-                <p><a href="/account" class="text-reset">Account</a></p>
-                <p><a href="/messages" class="text-reset">Messages</a></p>
+                @if(session('AccountId'))
+                    <p><a href="/log-out-action" class="text-reset">Log Out</a></p>
+                @elseif(!session('AccountId'))
+                    <p><a href="/log-in" class="text-reset">Log In</a></p>
+                    <p><a href="/sign-up" class="text-reset">Sign Up</a></p>
+                @endif
             </div>
             <div class="col-2">
                 <h6 class="fw-bold mb-4">Support</h6>

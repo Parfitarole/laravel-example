@@ -7,9 +7,9 @@
                 <h2 class="text-center">Home Page</h2><hr>
                 <p>
                     Welcome to my demo website
-                    @empty($account)
+                    @if(!session('AccountId'))
                         , please <a href="/log-in" class="text-reset">log in</a> or <a href="/sign-up" class="text-reset">sign up</a>
-                    @endempty
+                    @endif
                 :)</p>
             </div>
         </div>

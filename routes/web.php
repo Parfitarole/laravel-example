@@ -25,6 +25,12 @@ Route::group(['middleware' => ['AuthCheck']], function() {
     // Displays the users feed Page
     Route::get('/feed', 'UserController@feed');
 
+    // Follows User
+    Route::get('/follow/{UserFollowingId}', 'UserController@followAction');
+
+    // Unfollow User
+    Route::get('/unfollow/{UserFollowingId}', 'UserController@UnFollowAction');
+
     // Calls the logOut Method in the AccountController
     Route::get('/log-out-action', 'AccountController@logOutAction');
 

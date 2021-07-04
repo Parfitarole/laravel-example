@@ -8,10 +8,13 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    /**
+     * Displays the Home page
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
-        $account = Accounts::where('id', '=', session('AccountId'))->first();
-
-        return view('home.index')->with('account', $account);
+        return view('home.index');
     }
 }
