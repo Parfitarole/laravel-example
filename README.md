@@ -6,7 +6,7 @@ This project is a Twitter clone that I made whilst re-familiarising myself with 
 
 1. Git clone remote repo to local folder
 2. Enter db info to .env file
-3. Run php artisan migrated --seed
+3. Run php artisan migrate --seed
 
 ## Test Account Info ##
 
