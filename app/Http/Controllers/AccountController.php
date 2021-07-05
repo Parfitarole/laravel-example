@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,8 +15,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $account = Accounts::where('id', '=', session('AccountId'))->first();
-        
+        $account = Account::where('id', '=', session('AccountId'))->first();
+
         return view('account.index', compact('account'));
     }
 
@@ -42,7 +42,7 @@ class AccountController extends Controller
             'password' => 'required',
         ]);
 
-        $account = Accounts::where('email', '=', $request->email)->first();
+        $account = Account::where('email', '=', $request->email)->first();
 
         if ($account ) {
             if (Hash::check($request->password, $account->password)) {
@@ -100,7 +100,7 @@ class AccountController extends Controller
             return back()->with('Error', 'Passwords do not match');
         };
 
-        $account = new Accounts;
+        $account = new Account;
 
         $account->email    = $request->email;
         $account->username = $request->username;
@@ -108,7 +108,7 @@ class AccountController extends Controller
 
         $save = $account->save();
 
-        $account = Accounts::where('email', '=', $account->email)->first();
+        $account = Account::where('email', '=', $account->email)->first();
 
         if ($save) {
             $request->session()->put('AccountId', $account->id);

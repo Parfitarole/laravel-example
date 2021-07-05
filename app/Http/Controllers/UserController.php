@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
-use App\Models\Follows;
+use App\Models\Account;
+use App\Models\Follow;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -26,10 +27,17 @@ class UserController extends Controller
      */
     public function feed()
     {
-        $account = Accounts::where('id', '=', session('AccountId'))->first();
-        $follows = Follows::where('followerId', '=', session('AccountId'))->get();
+        $account = Account::where('id', '=', session('AccountId'))->first();
+        $follows = Follow::where('follower_id', '=', $account->id)->get();
+        $posts   = Post::orderBy('created_at', 'desc')->get();
 
-        return view('user.feed', compact('account'), compact('follows'));
+        return view('user.feed',
+            [
+                'account' => $account,
+                'follows' => $follows,
+                'posts'   => $posts
+            ]
+        );
     }
 
     /**
@@ -44,21 +52,53 @@ class UserController extends Controller
     }
 
     /**
+     * Saves a post to the database
+     * @param  int  $postId
+     */
+    public function postAction(Request $request)
+    {
+        $request->validate(['content' => 'required']);
+
+        $post = new Post;
+
+        $post->account_id = session('AccountId');
+        $post->content    = $request->content;
+
+        $save = $post->save();
+
+        if (!$save) {
+            return back()->with('Error', 'Failed to save post to the database');
+        } else {
+            return redirect('/feed');
+        }
+    }
+
+    /**
+     * Deletes a post from the database
+     *
+     * @param  int  $postId
+     */
+    public function deletePostAction($postId)
+    {
+        return redirect('/');
+    }
+
+    /**
      * Saves a follow to the database
      *
      * @param  int  $userFollowedId
      */
     public function followAction($userFollowedId)
     {
-        $follow = new Follows;
+        $follow = new Follow;
 
         $follow->followerId     = session('AccountId');
         $follow->userFollowedId = $userFollowedId;
 
         $save = $follow->save();
 
-        $account = Accounts::where('id', '=', $userFollowedId)->first();
-        $follow  = Follows::where('userFollowedId', '=', $userFollowedId)->first();
+        $account = Account::where('id', '=', $userFollowedId)->first();
+        $follow  = Follow::where('userFollowedId', '=', $userFollowedId)->first();
 
         if ($save) {
             return back()->with('$account', $account)
@@ -78,25 +118,6 @@ class UserController extends Controller
         return back();
     }
 
-    /**
-     * Saves a post to the database
-     * @param  int  $postId
-     */
-    public function postAction($postId)
-    {
-
-        return redirect('/');
-    }
-
-    /**
-     * Deletes a post from the database
-     *
-     * @param  int  $postId
-     */
-    public function deletePostAction($postId)
-    {
-        return redirect('/');
-    }
 
     /**
      * Saves a comment to the database
@@ -125,7 +146,7 @@ class UserController extends Controller
      */
     public function messages()
     {
-        $follows = Follows::where('followerId', '=', session('AccountId'))->get();
+        $follows = Follow::where('follower_id', '=', session('AccountId'))->get();
 
         return view('user.messages', compact('follows'));
     }
@@ -136,9 +157,23 @@ class UserController extends Controller
      * @param  int  $messageId
      * @return \Illuminate\View\View
      */
-    public function sendMessageAction($messageId)
+    public function sendMessageAction(Request $request)
     {
-        return redirect('/');
+        $request->validate(['content' => 'required']);
+
+        $message = new Post;
+
+        $message->account_id   = session('AccountId');
+        $message->recepient_id = $request->recepient_id;
+        $message->content      = $request->content;
+
+        $save = $message->save();
+
+        if (!$save) {
+            return back()->with('Error', 'Failed to save message to the database');
+        } else {
+            return redirect('/messages');
+        }
     }
 
     /**

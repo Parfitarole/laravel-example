@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
+use App\Models\Post;
 
 class HomeController extends Controller
 {

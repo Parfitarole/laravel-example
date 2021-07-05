@@ -40,7 +40,7 @@ Route::group(['middleware' => ['AuthCheck']], function() {
     // Displays the individual user's post page
     Route::get('user/{AccountId}/post/{postId}', 'UserController@post');
 
-    // Post form data from the post pop up to the postAction method in the UserController
+    // Post form data from the feed page to the postAction method in the UserController
     Route::post('/post', 'UserController@postAction');
 
     // Calls the deletePostAction method in the UserController to delete a post
@@ -56,7 +56,7 @@ Route::group(['middleware' => ['AuthCheck']], function() {
     Route::get('/messages', 'UserController@messages');
 
     // Post form data from the message page to the sendMessageAction method in the UserController
-    Route::post('/send-message', 'UserController@sendMessageAction');
+    Route::post('/message', 'UserController@sendMessageAction');
 
     // Calls the deleteMessageAction method in the UserController to delete a post
     Route::post('/delete-message', 'UserController@deleteMessageAction');
